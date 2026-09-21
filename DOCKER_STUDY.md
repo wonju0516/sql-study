@@ -51,6 +51,21 @@ Docker를 쓰면 "이미 설치·설정이 끝난 Postgres"를 받아서 바로 
 - **접속 통로.** 내 PC의 `5432`번으로 접속하면 컨테이너 안 Postgres로 연결된다.
 - 컨테이너는 격리돼 있어서, 포트를 열어 주지 않으면 밖(내 PC, VS Code)에서 접속할 수 없다.
 
+### .env 파일
+- **설정값(특히 비밀번호)을 코드와 분리해서 적어 두는 파일.** `이름=값` 형식으로 한 줄씩 쓴다.
+  ```
+  POSTGRES_PASSWORD=mypassword
+  ```
+- docker compose는 같은 폴더의 `.env`를 자동으로 읽는다. compose 파일에서는 `${이름}`으로 꺼내 쓴다.
+  ```yaml
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  ```
+- 이렇게 하면 비밀번호가 `docker-compose.yml`에 직접 적히지 않는다.
+
+### .gitignore와 .env.example
+- **`.gitignore`**: git이 추적하지 않을 파일 목록. `.env`를 여기에 넣으면 GitHub에 올라가지 않는다.
+- **`.env.example`**: `.env`에 어떤 값이 필요한지 알려 주는 **빈 견본**. 값은 비워 두고 GitHub에 올린다. 새 PC에서는 이걸 복사해서 `.env`를 만든다.
+
 ### Docker Desktop
 
 - Windows에서 Docker 엔진을 돌려주는 앱. **이게 꺼져 있으면 `docker` 명령이 전부 실패한다.**
