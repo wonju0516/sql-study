@@ -54,7 +54,7 @@ Docker를 쓰면 "이미 설치·설정이 끝난 Postgres"를 받아서 바로 
 ### .env 파일
 - **설정값(특히 비밀번호)을 코드와 분리해서 적어 두는 파일.** `이름=값` 형식으로 한 줄씩 쓴다.
   ```
-  POSTGRES_PASSWORD=mypassword
+  POSTGRES_PASSWORD=내가_정한_비밀번호
   ```
 - docker compose는 같은 폴더의 `.env`를 자동으로 읽는다. compose 파일에서는 `${이름}`으로 꺼내 쓴다.
   ```yaml
@@ -162,7 +162,7 @@ volumes:
 | Port     | `5432`       |
 | Database | `dvdrental`  |
 | Username | `postgres`   |
-| Password | `mypassword` |
+| Password | `.env` 파일의 `POSTGRES_PASSWORD` 값 |
 
 ### 방법 B. 컨테이너 안에서 psql 실행
 
