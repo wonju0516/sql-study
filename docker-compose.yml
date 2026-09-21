@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: dvdrental
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./DVD_rental_DDL.sql:/docker-entrypoint-initdb.d/01-DVD_rental_DDL.sql
+      - ./DVD_rental_data.sql:/docker-entrypoint-initdb.d/02-DVD_rental_data.sql
+
+volumes:
+  postgres_data:
