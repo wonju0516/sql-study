@@ -4,9 +4,57 @@
 
 ## 파일
 
-| 파일 | 내용 |
+| 파일 | 대상 DB | 내용 |
+|---|---|---|
+| `example.sql` | dvdrental | `search_path` 설정과 `SELECT` 기본 예제 |
+| `dvdrental_select.sql` | dvdrental | `SELECT` 심화: ORDER BY, WHERE, LIMIT, DISTINCT, BETWEEN, IN, LIKE/ILIKE |
+| `company_hr_practice.sql` | company | 스키마 만들기 연습: `CREATE SCHEMA`, `CREATE TABLE`, `INSERT` |
+
+---
+
+## dvdrental_select.sql — SELECT 심화 연습
+
+`dvdrental` DB, `dvdrental.film` / `dvdrental.actor` 테이블로 연습.
+
+| 절/키워드 | 내용 |
 |---|---|
-| `example.sql` | `search_path` 설정과 `SELECT` 기본 예제 |
+| `ORDER BY` | 정렬. `DESC`로 내림차순 |
+| `WHERE` | 조건으로 행 필터링 (`length > 100` 등) |
+| `LIMIT` | 결과 행 개수 제한 |
+| `DISTINCT` | 중복 제거 |
+| `BETWEEN a AND b` | `>= a AND <= b`와 동일 |
+| `IN (...)` | 여러 값 중 하나와 일치하는지 |
+| `LIKE` | 패턴 매칭, `%`는 임의 문자열. 대소문자 **구분함** |
+| `ILIKE` | `LIKE`와 같지만 대소문자 **구분 안 함** (PostgreSQL 전용) |
+
+- 테이블명 앞에 `dvdrental.`을 붙이거나, 파일 맨 위 `SET search_path TO dvdrental;`로 생략 가능 (자세한 건 위 "스키마와 search_path" 참고).
+
+---
+
+## company_hr_practice.sql — 스키마/테이블 생성 연습
+
+`company` DB에서 새 스키마와 테이블을 처음부터 만들어보는 연습.
+
+```sql
+CREATE SCHEMA hr;
+SET search_path TO hr;
+
+CREATE TABLE hr.employees (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    position TEXT
+);
+
+INSERT INTO hr.employees (name, position)
+VALUES ('Alice', 'Manager');
+
+SELECT * FROM hr.employees;
+```
+
+- `CREATE SCHEMA hr;`: `company` DB 안에 `hr`이라는 새 스키마(폴더) 생성
+- `CREATE TABLE hr.employees (...)`: `hr` 스키마 안에 테이블 생성. `SERIAL PRIMARY KEY`는 자동 증가하는 기본키
+- `INSERT INTO ... VALUES (...)`: 행 삽입
+- 스키마/테이블 이름 오타(`employee` vs `employees`) 때문에 `relation does not exist` 에러가 났던 적 있음 → 이름은 항상 정확히 일치해야 함
 
 ---
 
@@ -65,15 +113,3 @@ SELECT * FROM actor;
 - `SELECT *`: 모든 컬럼을 가져온다.
 - `FROM actor`: `actor` 테이블에서 가져온다.
 - `search_path`가 `dvdrental`이면 `dvdrental.actor`와 같은 뜻이다.
-
----
-
-## VS Code에서 SQL 실행하기 (SQLTools)
-
-- 왼쪽 원통 아이콘에서 `dvdrental (docker)`에 **Connect**한 뒤 실행한다.
-- 실행 방법:
-  - 코드 위의 **`Run on active connection`** 클릭
-  - `Ctrl+E` 두 번 (맥은 `Command+E` 두 번)
-  - 우클릭 → **Run Selected Query**
-- 아무것도 선택하지 않으면 커서가 있는 블록이 실행되고, 일부만 실행하려면 그 부분을 선택한다.
-- 오른쪽 위 ▶ 버튼은 Code Runner 확장의 것이라 SQL을 실행하지 못한다.
